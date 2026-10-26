@@ -1,0 +1,50 @@
+services:
+  db:
+    image: pgvector/pgvector:pg16
+    container_name: teal-agent-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: teal_agent
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d teal_agent"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build: .
+    container_name: teal-agent-api
+    environment:
+      SERVER_PORT: 8123
+      DASHSCOPE_API_KEY: ${DASHSCOPE_API_KEY}
+      CHAT_MODEL: ${CHAT_MODEL:-qwen-plus}
+      SEARCH_API_KEY: ${SEARCH_API_KEY:-}
+      # 向量库与会话状态都落库
+      VECTOR_STORE: pgvector
+      MANUS_CHECKPOINTER: postgres
+      DATABASE_URL: postgresql://postgres:postgres@db:5432/teal_agent
+      VECTOR_DATABASE_URL: postgresql+psycopg://postgres:postgres@db:5432/teal_agent
+    ports:
+      - "8123:8123"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  mcp-image-search:
+    build: .
+    container_name: teal-agent-mcp-image
+    command: ["python", "-m", "mcp_servers.teal_image_search.server"]
+    environment:
+      MCP_TRANSPORT: sse
+      MCP_PORT: 8127
+      PEXELS_API_KEY: ${PEXELS_API_KEY:-}
+    ports:
+      - "8127:8127"
+
+volumes:
+  pgdata:

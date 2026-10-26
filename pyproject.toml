@@ -1,0 +1,67 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "teal-ai-agent"
+version = "0.0.1"
+description = "基于 FastAPI + LangChain + LangGraph 的 AI 超级智能体应用（AI 运动健康助手 / TealManus）"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [{ name = "Teal", email = "773676272@qq.com" }]
+dependencies = [
+    "fastapi>=0.115,<1.0",
+    "uvicorn[standard]>=0.30",
+    "pydantic>=2.7",
+    "pydantic-settings>=2.3",
+    "langchain>=0.3.20,<0.4",
+    "langchain-core>=0.3.20,<0.4",
+    "langchain-openai>=0.2.14",
+    "langchain-text-splitters>=0.3.5",
+    "langgraph>=0.2.60,<0.4",
+    "langgraph-checkpoint-postgres>=2.0.9",
+    "langchain-postgres>=0.0.13",
+    "psycopg[binary,pool]>=3.2",
+    "httpx>=0.27",
+    "beautifulsoup4>=4.12",
+    "reportlab>=4.2",
+    "mcp>=1.2",
+    "langchain-mcp-adapters>=0.0.5",
+    "python-dotenv>=1.0",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.2", "pytest-asyncio>=0.23", "ruff>=0.6"]
+
+[project.urls]
+Homepage = "https://github.com/Teal-loading/ai-agent-two"
+
+[tool.setuptools.packages.find]
+include = ["app*", "mcp_servers*"]
+exclude = ["tests*", "examples*"]
+
+[tool.setuptools.package-data]
+app = ["resources/document/*.md"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+addopts = "-q"
+filterwarnings = ["ignore::DeprecationWarning"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py311"
+exclude = ["teal-ai-agent-frontend", ".venv"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "N", "ASYNC"]
+ignore = ["N803", "N815", "B008", "N818"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["N803", "N815", "E501"]
+# 提示词必须逐字保留，不做换行调整
+"app/prompts.py" = ["E501"]
+# 工具 Schema 描述同样需要原样保留
+"app/tools/*" = ["E501"]

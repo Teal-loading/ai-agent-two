@@ -1,0 +1,38 @@
+### CUSTOM ###
+.env
+tmp
+HELP.md
+
+### Python ###
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+
+### 本地归档（仅本机保留，不入库） ###
+.archive/
+target/
+
+### WorkBuddy ###
+.workbuddy/
+
+### Node / 前端 ###
+node_modules/
+teal-ai-agent-frontend/dist/
+dist/
+
+### JetBrains ###
+.idea
+*.iml
+*.iws
+*.ipr
+
+### VS Code ###
+.vscode/

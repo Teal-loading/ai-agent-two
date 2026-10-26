@@ -1,0 +1,25 @@
+{
+  "mcpServers": {
+    "amap-maps": {
+      "command": "npx.cmd",
+      "args": [
+        "-y",
+        "@amap/amap-maps-mcp-server"
+      ],
+      "env": {
+        "AMAP_MAPS_API_KEY": "你的 API Key"
+      }
+    },
+    "teal-image-search-mcp-server": {
+      "command": "python",
+      "args": [
+        "-m",
+        "mcp_servers.teal_image_search.server"
+      ],
+      "env": {
+        "PEXELS_API_KEY": "改为你的 API Key",
+        "MCP_TRANSPORT": "stdio"
+      }
+    }
+  }
+}
